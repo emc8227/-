@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+ <section id="game">
+    <p><h1 align="center"><span style="color:yellow">翻牌對對碰</span></h1></p>
+    <p><button id="star" type="button" style="position:relative; left:230px; top: 0px;" onClick="a(this)">start</button></p>
+    <div id="cards">
+        <div class="card" style="left:0px;top:0px;">
+            <div class="face up"><input type="image" id="img0" src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image0" /></div>
+        </div>
+        <div class="card" style="left:100px;top:0px;">
+            <div class="face up"><input type="image" id="img1"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image1"  /></div>
+        </div>
+        <div class="card" style="left:200px;top:0px;">
+            <div class="face up"><input type="image" id="img2"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image2"  /></div>
+        </div>
+        <div class="card" style="left:300px;top:0px;">
+            <div class="face up"><input type="image" id="img3"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image3"  /></div>
+        </div>
+        <div class="card" style="left:0px;top:140px;">
+            <div class="face up"><input type="image" id="img4"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image4"  /></div>
+        </div>
+        <div class="card" style="left:100px;top:140px;">
+            <div class="face up"><input type="image" id="img5"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image5"  /></div>
+        </div>
+        <div class="card" style="left:200px;top:140px;">
+            <div class="face up"><input type="image" id="img6"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image6"  /></div>
+        </div>
+        <div class="card" style="left:300px;top:140px;">
+            <div class="face up"><input type="image" id="img7"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image7"  /></div>
+        </div>
+        <div class="card" style="left:0px;top:280px;">
+            <div class="face up"><input type="image" id="img8"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image8"  /></div>
+        </div>
+        <div class="card" style="left:100px;top:280px;">
+            <div class="face up"><input type="image" id="img9"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image9"  /></div>
+        </div>
+        <div class="card" style="left:200px;top:280px;">
+            <div class="face up"><input type="image" id="img10"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image10"  /></div>
+        </div>
+        <div class="card" style="left:300px;top:280px;">
+            <div class="face up"><input type="image" id="img11"  src="image_0.gif" class="back" onClick="chk(this)"/></div>
+            <div class="face down"><input type="image" id="Image11"  /></div>
+        </div>
+    </div>
+  
+    <span>計時器:</span><input type="text" name="time" id="time"/>
+    <hr>
+    <p id="report" type="text" align="center" ><big></big></p>
+</section>
+    <script>
+    $(document).ready(function(){
+
+    });
+    
+    function random(min,max){
+        return Math.floor(Math.random()*(max-min+1))+min;
+        }
+    function a(){
+        var map=new Array();
+        var rnd=new Array();
+        var temp=0;
+        for (var i=0;i<12;i++){
+            map[i]=new Image();
+            map[i].src="image"+i+".gif";
+        }
+        
+        var flag=0;
+        while (flag<12){
+        temp=random(0,11);
+        if(rnd.indexOf(temp)==-1)
+            {
+            rnd[flag]=temp;
+            // console.log(rnd[flag]);
+         
+            $("#Image"+flag).attr('src',map[temp].src);
+            $("#img"+flag).attr('value',temp);
+            flag= flag+1;
+            }
+            
+        }
+        timedCount();
+    };
+    
+    var ct=0;
+    var cc=1;
+    var tid=0;
+    var card1class='';
+    var card2class='';
+    var n1=0;
+    var n2=0;
+    var win=0;
+    $(".back").click(
+        function (){
+          ct++ ;
+          cc++ ;
+          if (ct>1) {ct=0};
+        });
+        
+       
+    
+    function chk(obj)
+    {
+        if(ct==0){
+            n1=obj.value%6
+            card1class=$(obj).parent().parent();
+            
+            $(card1class).addClass("card-flip");
+            $("#"+obj.id).attr('disabled',true);
+            tid=obj.id;
+        }
+        if(ct==1){
+            n2=obj.value%6;
+            card2class=$(obj).parent().parent();
+           
+            $(card2class).addClass("card-flip");
+            $("#"+obj.id).attr('disabled',true);
+            setTimeout(function(){
+                
+            if(n1==n2){
+                n1=0;
+                n2=0;
+                win+=1;
+                // alert("恭喜"+"找到第"+win+"組");
+            }
+            if(n1!=n2){
+                 $("#"+obj.id).attr('disabled',false);
+                 $("#"+tid).attr('disabled',false);
+                 $(card1class).removeClass("card-flip");
+                 $(card2class).removeClass("card-flip");
+                 card1class='';
+                 card2class='';
+                 n1=0;
+                 n2=0;
+                //  alert("錯了");
+            }
+            if(win==6){
+            clearTimeout(t);
+            document.getElementById('report').innerHTML='<b>恭喜你完成遊戲</b><br>'+'總共花費'+c+'秒<br>'+'點擊次數'+cc+'次';
+            }
+            },700);
+        }
+    }
+    var c=0
+    var t
+    function timedCount(){
+        
+        document.getElementById("time").value=c
+        c=c+1;
+        t=setTimeout("timedCount()",1000);
+    }
+    </script>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            background-image: url(bgg.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+        #report{
+            color:green;
+        }
+        #game{
+            width: 502px;
+            height: 700px;
+            margin: 0 auto;
+            border: 1px solid;
+        }
+        #cards{
+         width:380px;
+         height:400px;
+         position:relative;
+         margin:30px auto;
+        }
+        .card
+        {
+            position:absolute;
+            width:90px;
+            height:120px;
+        }
+        .face
+        {
+         width:100%;
+         height:100%;
+         border-radius:10px;
+         position:absolute;
+         -webkit-backface-visibility:hidden;
+         -webkit-transition:all .3s;
+        }
+        .up
+        {
+            z-index: 1;
+        }
+        .down
+        {
+            z-index: -1;
+        }
+        .card-flip .up
+        {
+            z-index:-1;
+        }
+        .card-flip .down
+        {
+            z-index:1;
+            -webkit-transform: rotateZ(360deg);
+        }
+     </style>
+</body>
+
+</html>
